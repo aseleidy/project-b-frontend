@@ -36,3 +36,24 @@
     transform: rotate(360deg);
   }
 }
+
+button.ui.primary.button {
+  background-color: 'yellow'
+}
+
+.signup-proficiency-table {
+  align-content: 'center'
+}
+
+.row {
+  height: 4em;
+  }
+
+.main-div {
+  padding: 2em;
+}
+
+.page-header {
+  padding-bottom: 4em;
+}
+
