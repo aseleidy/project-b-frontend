@@ -9,6 +9,7 @@ import {
   Header,
   Message,
   Segment,
+  Image
 } from 'semantic-ui-react';
 
 class Login extends React.Component {
@@ -60,41 +61,25 @@ class Login extends React.Component {
       <Grid centered columns={2}>
       <Grid.Column>
       <Header as="h2" textAlign="center">
-        Login
       </Header>
       <Segment>
-        <Form size="large" onSubmit={this.handleSubmit}>
-          <Form.Input
-            fluid
-            name={'username'}
-            icon="user"
-            iconPosition="left"
-            placeholder="Username"
-            value={this.state.username}
-            onChange={this.handleInputChange} 
-          />
-          <Form.Input
-            fluid
-            name={'password'}
-            icon="lock"
-            iconPosition="left"
-            placeholder="Password"
-            type="password"
-            value={this.state.password}
-            onChange={this.handleInputChange} 
-          />
- 
-          <Button color="yellow" fluid size="large" input type='submit' value='Login'>
-            Login
-          </Button>
-        </Form>
+        
+        <Image src='../images/project-b-logo' size='medium' floated='center' />
+       
       </Segment>
-      <Message align='center'>
-        Not registered yet? <a href="/signup">Sign Up</a>
+      <Message align='center' color='black'>
+      <p>Project B is a school for youth and young adults in the Middle East. The idea is to cultivate a new generation of citizens who appreciate diversity, promote a culture of peace, lead responsibly, and embrace lifelong learning. Unlike in traditional schools, students will receive instruction in subjects that aren’t typically covered, including emotional intelligence, cognitive processes, and philosophy. They will be challenged to think critically about both their external environments and their individual qualities. This critical reasoning combined with the nuanced curriculum and school’s resources will equip students with the tools needed to overcome obstacles and flourish as changemakers.</p>
+      <p>The project was inspired by an entrepreneurship workshop at Karam House, an innovative workspace for Syrian students in Istanbul, wherein "instruction" emphasized purposeful reflection instead of rote memorization. The takeaways from that workshop, combined with our strong belief in the power of education to improve lives, led us to launch this distinct educational program that shuns boundaries and rigid pedagogy.</p>
+      <p>"B" stands for bravery, beginning, belonging, believing and most importantly, being.</p>
       </Message>
     </Grid.Column>
   </Grid>
-  </div>
+  
+
+
+
+       
+      </div>
     )
   }
 }

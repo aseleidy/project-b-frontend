@@ -1,11 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import { Card, Icon } from 'semantic-ui-react'
-import { coursesDataSuccess } from '../actions/courses';
 import course from '../reducers/courses';
 import CourseCard from './CourseCard';
+import { currentUser } from '../actions/auth';
 
-const src = '/images/wireframe/image.png'
 
 const extra = (
   <a>
@@ -14,17 +13,35 @@ const extra = (
   </a>
 )
 
-
 class CoursesContainer extends React.Component {
   
   componentDidMount() {
-    fetch('http://localhost:3000/courses')
+    const token = localStorage.getItem('token')
+
+    const reqObj = {
+      method: 'GET', 
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+
+    fetch('http://localhost:3000/current_user', reqObj)
       .then(response => response.json())
-      .then(data => {
-        console.log(data)
-        this.props.coursesDataSuccess(data)
+      .then(student => {
+        if (student.error) {
+          this.props.history.push('/login')
+        } else {
+          this.props.currentUser(student)
+        }
       })
-      console.log(this.props)
+
+    // fetch('http://localhost:3000/courses')
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log(data)
+    //     this.props.coursesDataSuccess(data)
+    //   })
+    //   console.log(this.props)
   }
 
   convertTime = (courseTime) => {
@@ -45,9 +62,6 @@ class CoursesContainer extends React.Component {
   render(){
     return (
       <div>
-        <div className='page-header'>
-          <h1>Active Courses</h1>
-        </div>
         <Card.Group itemsPerRow={4}>
           {
             this.props.courses.map((course) => {
@@ -60,14 +74,14 @@ class CoursesContainer extends React.Component {
   }
 };
 
-const mapStateToProps = (state) => {
-  return {
-    courses: state.courses
-  }
+// const mapStateToProps = (state) => {
+//   return {
+//     courses: state.courses
+//   }
+// }
+
+const mapDispatchToProps = {
+  currentUser
 }
 
-const mapDispathToProps = {
-  coursesDataSuccess
-}
-
-export default connect(mapStateToProps, mapDispathToProps)(CoursesContainer);
+export default connect(null, mapDispatchToProps)(CoursesContainer);

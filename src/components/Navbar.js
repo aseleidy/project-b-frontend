@@ -2,41 +2,92 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'
 import { logoutUser } from '../actions/auth'
+import { withRouter } from 'react-router-dom'
+import {
+  Button,
+  Menu,
+  Dropdown,
+  Header,
+  Message,
+  Segment,
+  Select, 
+  Field
+} from 'semantic-ui-react';
 
 class Navbar extends React.Component {
+  state = { activeItem: 'home' }
+
+  handleItemClick = (e, { name }) => {
+    this.setState({ activeItem: name })
+    this.props.history.push(`/${name}`)
+  }
+
+  logout = (e, { name }) => {
+    this.props.logoutUser()
+    this.setState({ activeItem: name })
+    this.props.history.push(`/${name}`)
+  }
+
   render() {
+    const { activeItem } = this.state
+
     return (
       <div>
-        <div className="ui large menu">
-          <a className="active item">
-            Home
-          </a>
-          <a className="item">
-            <Link to='/courses'>
-              Courses
-            </Link>
-          </a>
-          <div className="right menu">
-            <div className="item">
-                <div className="ui primary button">Sign Up</div>
-            </div>
-            <div class="item">
-              {
-                this.props.auth ? 
-                  <div className="ui primary button" onClick={this.props.logoutUser}>Logout</div>
-                : 
-                  <div className="ui primary button" >Login</div> 
-              }
-                
-            </div>
-          </div>
-        </div>
-
         <div>
-          <Link to='/student'>
+        <Menu size='large'>
+          <Menu.Item
+            name='home'
+            active={activeItem === 'home'}
+            onClick={this.handleItemClick}
+          />
+          <Menu.Item
+            name='courses'
+            active={activeItem === 'courses'}
+            onClick={this.handleItemClick}
+          />
 
-          </Link>
-        </div>
+          { (this.props.auth) ? (
+            <Menu.Item
+              name='student'
+              active={activeItem === 'student'}
+              onClick={this.handleItemClick}
+            />
+          ) : (
+            <div></div>
+          )
+
+          }
+
+          <Menu.Menu position='right'>
+            <Menu.Item 
+              name='signup'
+              active={activeItem === 'signup'}
+              onClick={this.handleItemClick}
+            >
+              <Button color='black'>Sign Up</Button>
+            </Menu.Item>
+          {
+            this.props.auth ? 
+            <Menu.Item
+              name='login'
+              active={activeItem === 'login'}
+              onClick={this.logout}
+              >
+              <Button color='black'>Logout</Button>
+            </Menu.Item>
+            :
+            <Menu.Item
+              name='login'
+              active={activeItem === 'login'}
+              onClick={this.handleItemClick}
+              > 
+              <Button color='black'>Login</Button>
+            </Menu.Item>
+
+          }
+          </Menu.Menu>
+        </Menu>
+      </div>
 
         <div>
           {
@@ -58,7 +109,6 @@ class Navbar extends React.Component {
             My Profile
           </Link>
         </div>
-        
       </div>
     )
   }
@@ -73,4 +123,4 @@ const mapDispatchToProps = {
   logoutUser
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Navbar)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Navbar));
