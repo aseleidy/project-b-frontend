@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
+import { currentUser, loginSuccess } from '../actions/auth';
 import {
   Button,
   Form,
@@ -142,7 +143,12 @@ class StudentCreateAccount extends React.Component {
         ...this.state, 
         all_topics: undefined
       }
-      console.log(formData)
+      
+      const signInData = {
+        username: this.state.username,
+        password: this.state.password
+      }
+      console.log(signInData)
     
       const reqObj = {
         method: 'POST', 
@@ -156,35 +162,27 @@ class StudentCreateAccount extends React.Component {
         .then(response => response.json())
         .then(data => {
           if (!data.error) {
-            this.setState({
-              all_topics: [],
-              username: '',
-              password: '',
-              first_name: '',
-              last_name: '',
-              email: '',
-              gender: '',
-              age: '',
-              country_origin: '',
-              country_residence: '',
-              country_code: '',
-              telephone: '',
-              english_reading: '',
-              english_writing: '',
-              english_speaking: '',
-              english_listening: '',
-              arabic_reading: '',
-              arabic_writing: '',
-              arabic_speaking: '',
-              arabic_listening: '',
-              turkish_reading: '',
-              turkish_writing: '',
-              turkish_speaking: '',
-              turkish_listening: '',
-              category: [],
-            })
+            console.log(data, '________________')
+            const signInObj = {
+              method: 'POST', 
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(signInData)
+            }
 
-            console.log(data)
+            fetch('http://localhost:3000/auth', signInObj)
+              .then(response => response.json())
+              .then(student => {
+                if (student.error){
+                  alert(student.error)
+                } else {
+                  localStorage.setItem('token', student.jwt)
+                  this.props.loginSuccess(student)
+                  this.props.history.push('/student')
+                }
+                
+              })
           } else {
             alert(data.error)
           }
@@ -631,7 +629,8 @@ class StudentCreateAccount extends React.Component {
 };
 
 const mapDispathToProps = {
-  
+  currentUser,
+  loginSuccess
 }
 
 export default connect(null, mapDispathToProps)(StudentCreateAccount);
